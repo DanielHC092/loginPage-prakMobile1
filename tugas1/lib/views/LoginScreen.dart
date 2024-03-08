@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:tugas1/views/secondScreen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget{
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+
+}
+class _LoginScreenState extends State<LoginScreen> {
+   String username="";
+   String password="";
+   bool isLogin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +41,21 @@ class LoginScreen extends StatelessWidget {
                 height: 40,
               ),
               TextFormField(
-                decoration: const InputDecoration(
+                onChanged: (value){
+                  username = value;
+                },
+                decoration:  InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderSide: BorderSide(color: Colors.red),
                   ),
-                  icon: Icon(Icons.person),
+                    enabledBorder:OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderSide: BorderSide(
+                        color: (isLogin) ? Colors.green:Colors.red,
+                      ),
+                    ),
+                    icon: Icon(Icons.person),
                   hintText: 'Input Username',
                   labelText: 'Username',
                   iconColor: Colors.red,
@@ -47,11 +67,21 @@ class LoginScreen extends StatelessWidget {
                 height: 25,
               ),
               TextFormField(
+                onChanged: (value){
+                  password = value;
+                },
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  enabledBorder:OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderSide: BorderSide(
+                        color: (isLogin) ? Colors.green:Colors.red,
+                    ),
                   ),
                   icon: Icon(Icons.lock),
                   hintText: 'Input Password',
@@ -72,7 +102,46 @@ class LoginScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    String text ="";
+                    SnackBar snackBar;
+                    if(username=="admin" && password=="123"){
+                      setState(() {
+                        text="Login Sukses";
+                        snackBar = SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          content: Text(text,
+                            style:TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ) ,),
+                          backgroundColor: Colors.green,
+                        );
+                        isLogin=true;
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context){
+                            return SecondScreen();
+                          }
+                      ));
+                      });
+                      }else{
+                      setState(() {
+                        text="Login Gagal";
+                        snackBar = SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          content: Text(text,
+                            style:TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ) ,),
+                          backgroundColor: Colors.red,
+                        );
+                        isLogin=false;
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      });
+                      }
+                    },
                   color: Colors.red,
                   child: Text(
                     'LOGIN',
